@@ -1,17 +1,3 @@
 ---
 - name: Creating the Users at the Managed_Host
   hosts: all
-  become: yes
-  vars_files:
-    - user_list.yml
-  tasks:
-    - vars:
-        password: "{{ lookup('password', ('password-') + item.name +' length=6') }}"
-      name: Adding   users
-      ansible.builtin.user:
-        name: "{{ item.name }}"
-        state: present
-        uid: "{{ item.ID }}"
-        password: " {{ password | password_hash('sha256') }}"
-        comment: "{{ item.first | capitalize +' '+ item.middle | capitalize +' '+ item.last | capitalize }}"
-      loop: "{{ users }}"
